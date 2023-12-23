@@ -5,7 +5,7 @@ import { RiAccountPinCircleLine, RiArrowDropDownFill } from "react-icons/ri";
 import styles from "./styles.module.scss";
 import UserMenu from "./UserMenu";
 
-export default function Top() {
+export default function Top({ country }) {
   const [loggedIn, setLoggedIn] = useState(true);
   const [visible, setVisible] = useState(false);
 
@@ -16,15 +16,16 @@ export default function Top() {
         <ul className={styles.top__list}>
           <li className={styles.li}>
             <img
-              src="https://cdn.britannica.com/68/5068-004-72A3F250/Flag-Nigeria.jpg"
+              // src="https://cdn.britannica.com/68/5068-004-72A3F250/Flag-Nigeria.jpg"
+              src={country.flag}
               alt=""
             />
-            <span>Nigeria | naira</span>
+            <span>{country.name}</span>
           </li>
 
           <li className={styles.li}>
             <MdSecurity />
-            <span>Buyer Protection</span>
+            <span>Buyer Protection..</span>
           </li>
 
           <li className={styles.li}>
