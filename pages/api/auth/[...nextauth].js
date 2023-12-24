@@ -3,6 +3,7 @@ import TwitterProvider from "next-auth/providers/twitter";
 import FacebookProvider from "next-auth/providers/facebook";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
+import Auth0Provider from "next-auth/providers/auth0";
 import AppleProvider from "next-auth/providers/apple";
 // import CredentialsProvider from "next-auth/providers/credentials";
 // import User from "../../../models/User";
@@ -37,10 +38,6 @@ export default NextAuth({
     //     }
     //   },
     // }),
-    AppleProvider({
-      clientId: process.env.AUTH0_CLIENT_ID,
-      clientSecret: process.env.APPLE_SECRET,
-    }),
     GitHubProvider({
       clientId: process.env.GITHUB_ID,
       clientSecret: process.env.GITHUB_SECRET,
@@ -56,6 +53,11 @@ export default NextAuth({
     GoogleProvider({
       clientId: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_SECRET,
+    }),
+    Auth0Provider({
+      clientId: process.env.AUTH0_CLIENT_ID,
+      clientSecret: process.env.AUTH0_CLIENT_SECRET,
+      issuer: process.env.AUTH0_ISSUER,
     }),
   ],
   //   callbacks: {
