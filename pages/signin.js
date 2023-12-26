@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import Footer from "../components/footer";
 import Header from "../components/header";
 import styles from "../styles/signin.module.scss";
@@ -16,12 +17,23 @@ const initialValues = {
   email: "",
   password: "",
   conf_password: "",
+  success: "",
+  error: "",
 };
 
 export default function signin({ providers }) {
   const [user, setUser] = useState(initialValues);
-  const { login_email, login_password, name, email, password, conf_password } =
-    user;
+  const {
+    login_email,
+    login_password,
+    name,
+    email,
+    password,
+    conf_password,
+    success,
+    error,
+  } = user;
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -59,6 +71,35 @@ export default function signin({ providers }) {
   });
 
   console.log(providers, "Providers");
+
+  const signInHandler = async () => {
+    try {
+      setLoading(true);
+      // let options = {
+      //   redirect: false,
+      //   email: login_email,
+      //   password: login_password,
+      // };
+      // const res = await signIn("credentials", options);
+      console.log("signIn clicked");
+      const { data } = await axios.post("/api/auth/signup", {
+        name,
+        email,
+        password,
+      });
+      setUser({ ...user, error: "", success: data.message });
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      setUser({ user, success: "", error: error.response.data.message });
+    }
+    // if (res?.error) {
+    //   setLoading(false);
+    //   setUser({ ...user, login_error: res?.error });
+    // } else {
+    //   return Router.push(callbackUrl || "/");
+    // }
+  };
 
   return (
     <div>
@@ -150,9 +191,9 @@ export default function signin({ providers }) {
                 conf_password,
               }}
               validationSchema={registerValidation}
-              //   onSubmit={() => {
-              //     signInHandler();
-              //   }}
+              onSubmit={() => {
+                signInHandler();
+              }}
             >
               {(form) => (
                 <Form>
@@ -196,6 +237,8 @@ export default function signin({ providers }) {
                 </Form>
               )}
             </Formik>
+            <div>{success && <span>{success}</span>}</div>
+            <div>{error && <span>{error}</span>}</div>
           </div>
         </div>
       </div>
