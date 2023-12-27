@@ -1,3 +1,11 @@
+.error {
+  color: $error-color;
+}
+.success {
+  padding: 10px;
+  color: $success-color
+}
+
 .login {
     position: relative;
     min-height: 100vh;

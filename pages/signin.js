@@ -1,16 +1,24 @@
-import React, { useState } from "react";
-import axios from "axios";
-import Footer from "../components/footer";
 import Header from "../components/header";
+import Footer from "../components/footer";
 import styles from "../styles/signin.module.scss";
-import LoginInput from "../components/input/loginInput";
 import { BiLeftArrowAlt } from "react-icons/bi";
 import Link from "next/link";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
+import LoginInput from "../components/input/loginInput";
+import { useState } from "react";
 import CircledIconBtn from "../components/buttons/circledIconBtn";
-import { getProviders, signIn } from "next-auth/react";
-const initialValues = {
+import {
+  getCsrfToken,
+  getProviders,
+  getSession,
+  signIn,
+  country,
+} from "next-auth/react";
+import axios from "axios";
+import DotLoaderSpinner from "../components/loaders/dotLoader";
+import Router from "next/router";
+const initialvalues = {
   login_email: "",
   login_password: "",
   name: "",
@@ -19,10 +27,11 @@ const initialValues = {
   conf_password: "",
   success: "",
   error: "",
+  login_error: "",
 };
-
-export default function signin({ providers }) {
-  const [user, setUser] = useState(initialValues);
+export default function signin({ providers, callbackUrl, csrfToken }) {
+  const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState(initialvalues);
   const {
     login_email,
     login_password,
@@ -32,13 +41,11 @@ export default function signin({ providers }) {
     conf_password,
     success,
     error,
+    login_error,
   } = user;
-  const [loading, setLoading] = useState(false);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUser({ ...user, [name]: value });
-    console.log(user, "Input");
   };
 
   const loginValidation = Yup.object({
@@ -47,7 +54,6 @@ export default function signin({ providers }) {
       .email("Please enter a valid email address."),
     login_password: Yup.string().required("Please enter a password"),
   });
-
   const registerValidation = Yup.object({
     name: Yup.string()
       .required("What's your name ?")
@@ -69,19 +75,9 @@ export default function signin({ providers }) {
       .required("Confirm your password.")
       .oneOf([Yup.ref("password")], "Passwords must match."),
   });
-
-  console.log(providers, "Providers");
-
-  const signInHandler = async () => {
+  const signUpHandler = async () => {
     try {
       setLoading(true);
-      // let options = {
-      //   redirect: false,
-      //   email: login_email,
-      //   password: login_password,
-      // };
-      // const res = await signIn("credentials", options);
-      console.log("signIn clicked");
       const { data } = await axios.post("/api/auth/signup", {
         name,
         email,
@@ -89,21 +85,45 @@ export default function signin({ providers }) {
       });
       setUser({ ...user, error: "", success: data.message });
       setLoading(false);
+      setTimeout(async () => {
+        let options = {
+          redirect: false,
+          email: email,
+          password: password,
+        };
+        const res = await signIn("credentials", options);
+        Router.push("/");
+      }, 2000);
     } catch (error) {
       setLoading(false);
-      setUser({ user, success: "", error: error.response.data.message });
+      setUser({ ...user, success: "", error: error.response.data.message });
     }
-    // if (res?.error) {
-    //   setLoading(false);
-    //   setUser({ ...user, login_error: res?.error });
-    // } else {
-    //   return Router.push(callbackUrl || "/");
-    // }
   };
-
+  const signInHandler = async () => {
+    setLoading(true);
+    let options = {
+      redirect: false,
+      email: login_email,
+      password: login_password,
+    };
+    const res = await signIn("credentials", options);
+    setUser({ ...user, success: "", error: "" });
+    setLoading(false);
+    if (res?.error) {
+      setLoading(false);
+      setUser({ ...user, login_error: res?.error });
+    } else {
+      return Router.push(callbackUrl || "/");
+    }
+  };
+  const country = {
+    name: " Nigeria",
+    flag: "https://cdn.britannica.com/68/5068-004-72A3F250/Flag-Nigeria.jpg",
+  };
   return (
-    <div>
-      <Header country="https://cdn.britannica.com/68/5068-004-72A3F250/Flag-Nigeria.jpg" />
+    <>
+      {loading && <DotLoaderSpinner loading={loading} />}
+      <Header country={country} />
       <div className={styles.login}>
         <div className={styles.login__container}>
           <div className={styles.login__header}>
@@ -116,7 +136,9 @@ export default function signin({ providers }) {
           </div>
           <div className={styles.login__form}>
             <h1>Sign in</h1>
-            <p>Get access to one of the best Eshopping services in Africa</p>
+            <p>
+              Get access to one of the best Eshopping services in the world.
+            </p>
             <Formik
               enableReinitialize
               initialValues={{
@@ -124,16 +146,16 @@ export default function signin({ providers }) {
                 login_password,
               }}
               validationSchema={loginValidation}
-              //   onSubmit={() => {
-              //     signInHandler();
-              //   }}
+              onSubmit={() => {
+                signInHandler();
+              }}
             >
               {(form) => (
-                <Form>
+                <Form method="post" action="/api/auth/signin/email">
                   <input
                     type="hidden"
                     name="csrfToken"
-                    // defaultValue={csrfToken}
+                    defaultValue={csrfToken}
                   />
                   <LoginInput
                     type="text"
@@ -150,9 +172,9 @@ export default function signin({ providers }) {
                     onChange={handleChange}
                   />
                   <CircledIconBtn type="submit" text="Sign in" />
-                  {/* {login_error && ( */}
-                  {/* <span className={styles.error}>{login_error}</span> */}
-                  {/* )} */}
+                  {login_error && (
+                    <span className={styles.error}>{login_error}</span>
+                  )}
                   <div className={styles.forgot}>
                     <Link href="/auth/forgot">Forgot password ?</Link>
                   </div>
@@ -162,26 +184,32 @@ export default function signin({ providers }) {
             <div className={styles.login__socials}>
               <span className={styles.or}>Or continue with</span>
               <div className={styles.login__socials_wrap}>
-                {providers.map((provider) => (
-                  <div key={provider.name}>
-                    <button
-                      className={styles.social__btn}
-                      onClick={() => signIn(provider.id)}
-                    >
-                      <img src={`../../icons/${provider.name}.png`} alt="" />
-                      Sign in with {provider.name}
-                    </button>
-                  </div>
-                ))}
+                {providers.map((provider) => {
+                  if (provider.name == "Credentials") {
+                    return;
+                  }
+                  return (
+                    <div key={provider.name}>
+                      <button
+                        className={styles.social__btn}
+                        onClick={() => signIn(provider.id)}
+                      >
+                        <img src={`../../icons/${provider.name}.png`} alt="" />
+                        Sign in with {provider.name}
+                      </button>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
         </div>
-
         <div className={styles.login__container}>
           <div className={styles.login__form}>
             <h1>Sign up</h1>
-            <p>Get access to one of the best Eshopping services in Africa</p>
+            <p>
+              Get access to one of the best Eshopping services in the world.
+            </p>
             <Formik
               enableReinitialize
               initialValues={{
@@ -192,16 +220,11 @@ export default function signin({ providers }) {
               }}
               validationSchema={registerValidation}
               onSubmit={() => {
-                signInHandler();
+                signUpHandler();
               }}
             >
               {(form) => (
                 <Form>
-                  <input
-                    type="hidden"
-                    name="csrfToken"
-                    // defaultValue={csrfToken}
-                  />
                   <LoginInput
                     type="text"
                     name="name"
@@ -227,33 +250,27 @@ export default function signin({ providers }) {
                     type="password"
                     name="conf_password"
                     icon="password"
-                    placeholder="Confirm Password"
+                    placeholder="Re-Type Password"
                     onChange={handleChange}
                   />
                   <CircledIconBtn type="submit" text="Sign up" />
-                  {/* {login_error && ( */}
-                  {/* <span className={styles.error}>{login_error}</span> */}
-                  {/* )} */}
                 </Form>
               )}
             </Formik>
-            <div>{success && <span>{success}</span>}</div>
-            <div>{error && <span>{error}</span>}</div>
+            <div>
+              {success && <span className={styles.success}>{success}</span>}
+            </div>
+            <div>{error && <span className={styles.error}>{error}</span>}</div>
           </div>
         </div>
       </div>
-      <Footer country="Nigeria" />
-    </div>
+      <Footer country="Morocco" />
+    </>
   );
 }
 
 export async function getServerSideProps(context) {
-  const providers = Object.values(await getProviders());
-  //console.log(providers, "PROVIDERS:::");
-  return {
-    props: { providers },
-  };
-  // const { req, query } = context;
+  const { req, query } = context;
 
   // const session = await getSession({ req });
   // const { callbackUrl } = query;
@@ -265,13 +282,13 @@ export async function getServerSideProps(context) {
   //     },
   //   };
   // }
-  // const csrfToken = await getCsrfToken(context);
-  // const providers = Object.values(await getProviders());
-  // return {
-  //   props: {
-  //     providers,
-  //     csrfToken,
-  //     callbackUrl,
-  //   },
-  // };
+  const csrfToken = await getCsrfToken(context);
+  const providers = Object.values(await getProviders());
+  return {
+    props: {
+      providers,
+      csrfToken,
+      // callbackUrl,
+    },
+  };
 }
