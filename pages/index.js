@@ -13,13 +13,17 @@ import {
   women_shoes,
   women_swiper,
 } from "../data/home";
+import ProductCard from "../components/productCard";
+import db from "../utils/db";
+import Product from "../models/Product";
 import { useMediaQuery } from "react-responsive";
 import FlashDeals from "../components/home/flashDeals";
 import ProductsSwiper from "../components/productSwiper";
 import Category from "../components/home/category";
 
-export default function Home({ country }) {
-  console.log(country, "country data");
+export default function Home({ country, products }) {
+  //console.log(country, "country data");
+  console.log(products);
   const { data: session } = useSession();
   const isMedium = useMediaQuery({ query: "(max-width:850px)" });
   const isMobile = useMediaQuery({ query: "(max-width:550px)" });
@@ -64,6 +68,11 @@ export default function Home({ country }) {
             header="House Improvements"
             bg=""
           />
+          <div className={styles.products}>
+            {products.map((product) => (
+              <ProductCard product={product} key={product._id} />
+            ))}
+          </div>
         </div>
       </div>
       <Footer country={country} />
@@ -72,8 +81,9 @@ export default function Home({ country }) {
 }
 
 export async function getServerSideProps() {
-  // db.connectDb();
-  // let products = await Product.find().sort({ createdAt: -1 }).lean();
+  db.connectDb();
+  let products = await Product.find().sort({ createdAt: -1 }).lean();
+  console.log(products);
   let data = await axios
     .get("https://api.ipregistry.co/?key=rwrvftuy187zjhj4")
     .then((res) => {
@@ -85,6 +95,7 @@ export async function getServerSideProps() {
   console.log(data, "Data ::");
   return {
     props: {
+      products: JSON.parse(JSON.stringify(products)),
       country: {
         // name: data.name,
         // flag: data.flag.emojitwo,
