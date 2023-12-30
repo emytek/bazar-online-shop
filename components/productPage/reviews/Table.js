@@ -21,12 +21,12 @@ export default function Table({ reviews, allSizes, colors }) {
         allSizes={[{ size: "All" }, ...allSizes]}
         colors={[{ color: "", image: "" }, ...colors]}
       />
-      <div className={styles.table__data}>
+      {/* <div className={styles.table__data}>
         {_DATA.currentData().map((review, i) => (
           <Review review={review} key={i} />
         ))}
-      </div>
-      <div className={styles.pagination}>
+      </div> */}
+      {/* <div className={styles.pagination}>
         <Pagination
           count={count}
           page={page}
@@ -34,6 +34,26 @@ export default function Table({ reviews, allSizes, colors }) {
           shape="rounded"
           onChange={handleChange}
         />
+      </div> */}
+      <div className={styles.reviews__table_header}>
+        <div className={styles.table__data}>
+          {_DATA.currentData().map((review, i) => (
+            // <>
+            //   <span>{review.review}</span>
+            //   <br />
+            // </>
+            <Review review={review} key={i} />
+          ))}
+        </div>
+        <div className={styles.pagination}>
+          <Pagination
+            count={count}
+            page={page}
+            variant="round"
+            shape="rounded"
+            onChange={handleChange}
+          />
+        </div>
       </div>
     </div>
   );

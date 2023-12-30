@@ -7,23 +7,24 @@ import User from "../../models/User";
 import Head from "next/head";
 import Header from "../../components/header";
 import Footer from "../../components/footer";
-//import { produceWithPatches } from "immer";
-//import MainSwiper from "../../components/productPage/mainSwiper";
+import { produceWithPatches } from "immer";
+import MainSwiper from "../../components/productPage/mainSwiper";
 import { useState } from "react";
-//import Infos from "../../components/productPage/infos";
-//import Reviews from "../../components/productPage/reviews";
+import Infos from "../../components/productPage/infos";
+import Reviews from "../../components/productPage/reviews";
 import ProductSwiper from "../../components/productSwiper";
 
 export default function product({ product, related }) {
   const [activeImg, setActiveImg] = useState("");
+  console.log(product.reviews, "reviews");
   const country = {
     name: "Nigeria",
     flag: "https://cdn.britannica.com/68/5068-004-72A3F250/Flag-Nigeria.jpg",
   };
+
   return (
     <>
       <Head>
-        <h1>Test</h1>
         <title>{product.name}</title>
       </Head>
       <Header country={country} />
@@ -36,13 +37,12 @@ export default function product({ product, related }) {
             ))}
           </div>
           <div className={styles.product__main}>
-            {/* <MainSwiper images={product.images} activeImg={activeImg} />
-            <Infos product={product} setActiveImg={setActiveImg} /> */}
+            <MainSwiper images={product.images} activeImg={activeImg} />
+            <Infos product={product} setActiveImg={setActiveImg} />
           </div>
-          {/* <Reviews product={product} /> */}
-          {/*
-            <ProductsSwiper products={related} />
-            */}
+          <Reviews product={product} />
+
+          <ProductSwiper products={related} />
         </div>
       </div>
     </>
@@ -140,7 +140,7 @@ export async function getServerSideProps(context) {
     ).toFixed(1);
   }
   db.disconnectDb();
-  console.log("related", related);
+  //console.log("related", related);
   return {
     props: {
       product: JSON.parse(JSON.stringify(newProduct)),

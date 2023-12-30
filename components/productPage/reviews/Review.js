@@ -1,16 +1,20 @@
 import { Rating } from "@mui/material";
 import styles from "./styles.module.scss";
 import { AiOutlineLike } from "react-icons/ai";
+import product from "../../../pages/product/[slug]";
 export default function Review({ review }) {
-  const { name, image } = review.reviewBy;
+  // const { name, image } = review?.reviewBy;
+  const testReview = review?.review;
+
   return (
     <div className={styles.review}>
       <div className={styles.flex}>
         <div className={styles.review__user}>
           <h4>
-            {name.slice(0, 1)}***{name.slice(name.length - 1, name.length)}
+            {testReview.slice(0, 1)}***
+            {name.slice(name.length - 1, name.length)}
           </h4>
-          <img src={image} alt="" />
+          {/* <img src={image} alt="" /> */}
         </div>
         <div className={styles.review__review}>
           <Rating
@@ -21,6 +25,7 @@ export default function Review({ review }) {
             style={{ color: "#facf19" }}
           />
           <p>{review.review}</p>
+
           <p>
             <span>Overall Fit:</span>
             {review.fit}
@@ -53,6 +58,7 @@ export default function Review({ review }) {
           </div>
         </div>
       </div>
+      {/* <h4>Hello</h4> */}
     </div>
   );
 }
