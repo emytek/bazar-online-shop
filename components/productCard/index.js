@@ -36,11 +36,11 @@ export default function ProductCard({ product }) {
   return (
     <div className={styles.product}>
       <div className={styles.product__container}>
-        <a href={`/product/${product.slug}?style=${active}`} target="_blank">
+        <Link href={`/product/${product.slug}?style=${active}`}>
           <div>
             <ProductSwiper images={images} />
           </div>
-        </a>
+        </Link>
         {product.subProducts[active].discount ? (
           <div className={styles.product__discount}>
             -{product.subProducts[active].discount}%
