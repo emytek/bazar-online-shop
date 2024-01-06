@@ -9,10 +9,10 @@ export default function Product({ product, selected, setSelected }) {
   const { cart } = useSelector((state) => ({ ...state }));
   const [active, setActive] = useState();
   console.log(active);
-  //   useEffect(() => {
-  //     const check = selected.find((p) => p._uid == product._uid);
-  //     setActive(check);
-  //   }, [selected]);
+  useEffect(() => {
+    const check = selected.find((p) => p._uid == product._uid);
+    setActive(check);
+  }, [selected]);
   const dispatch = useDispatch();
   const updateQty = (type) => {
     let newCart = cart.cartItems.map((p) => {
