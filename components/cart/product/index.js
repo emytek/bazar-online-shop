@@ -15,7 +15,7 @@ export default function Product({ product, selected, setSelected }) {
   }, [selected]);
   const dispatch = useDispatch();
   const updateQty = (type) => {
-    let newCart = cart.cartItems.map((p) => {
+    let newCart = cart?.cartItems.map((p) => {
       if (p._uid == product._uid) {
         return {
           ...p,
@@ -27,7 +27,7 @@ export default function Product({ product, selected, setSelected }) {
     dispatch(updateCart(newCart));
   };
   const removeProduct = (id) => {
-    let newCart = cart.cartItems.filter((p) => {
+    let newCart = cart?.cartItems.filter((p) => {
       return p._uid != id;
     });
     dispatch(updateCart(newCart));

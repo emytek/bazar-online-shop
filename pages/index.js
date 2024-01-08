@@ -84,15 +84,15 @@ export async function getServerSideProps() {
   db.connectDb();
   let products = await Product.find().sort({ createdAt: -1 }).lean();
   console.log(products);
-  let data = await axios
-    .get("https://api.ipregistry.co/?key=rwrvftuy187zjhj4")
-    .then((res) => {
-      return res.data.location.country;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  console.log(data, "Data ::");
+  // let data = await axios
+  //   .get("https://api.ipregistry.co/?key=rwrvftuy187zjhj4")
+  //   .then((res) => {
+  //     return res.data.location.country;
+  //   })
+  //   .catch((err) => {
+  //     console.log(err);
+  //   });
+  // console.log(data, "Data ::");
   return {
     props: {
       products: JSON.parse(JSON.stringify(products)),

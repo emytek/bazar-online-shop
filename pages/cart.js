@@ -52,7 +52,7 @@ export default function cart() {
   const saveCartToDbHandler = async () => {
     if (session) {
       const res = saveCart(selected, session.user.id);
-      console.log(selected, session.user.id, "Parameters");
+      //console.log(selected, session.user.id, "Parameters");
       Router.push("/checkout");
     } else {
       signIn();
@@ -63,15 +63,15 @@ export default function cart() {
     <>
       <Header />
       <div className={styles.cart}>
-        {cart.cartItems.length > 0 ? (
+        {cart?.cartItems.length > 0 ? (
           <div className={styles.cart__container}>
             <CartHeader
-              cartItems={cart.cartItems}
+              cartItems={cart?.cartItems}
               selected={selected}
               setSelected={setSelected}
             />
             <div className={styles.cart__products}>
-              {cart.cartItems.map((product) => (
+              {cart?.cartItems.map((product) => (
                 <Product
                   product={product}
                   key={product._uid}

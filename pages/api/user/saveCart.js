@@ -3,13 +3,15 @@ import Product from "../../../models/Product";
 import User from "../../../models/User";
 import Cart from "../../../models/Cart";
 import db from "../../../utils/db";
-// import auth from "";
+//import auth from "../../../middleware/auth";
 
 const router = createRouter();
 
 // router.use(auth);
 
 router.post(async (req, res) => {
+  console.log("User Id", req.user);
+
   try {
     db.connectDb();
     const { cart, user_id } = req.body;
