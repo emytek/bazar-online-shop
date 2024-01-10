@@ -1,25 +1,27 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import { combineReducers } from "redux";
 import thunk from "redux-thunk";
 import storage from "redux-persist/lib/storage";
-import { persistReducer } from "redux-persist";
+import { persistReducer, persistStore } from "redux-persist";
 import cart from "./cartSlice";
 import expandSidebar from "./ExpandSlice";
 import dialog from "./DialogSlice";
+
 const reducers = combineReducers({ cart, expandSidebar, dialog });
 
-const config = {
+const persistConfig = {
   key: "root",
   version: 1,
   storage,
 };
 
-const reducer = persistReducer(config, reducers);
+const persistedReducer = persistReducer(persistConfig, reducers);
 
 const store = configureStore({
-  reducer: reducer,
-  // devTools: process.env.NODE_ENV !== "production",
-  // middleware: [thunk],
+  reducer: persistedReducer,
+  //middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk),
 });
 
-export default store;
+const persistor = persistStore(store);
+
+export { store, persistor };

@@ -1,12 +1,11 @@
 import Head from "next/head";
 import "../styles/globals.scss";
 import { Provider } from "react-redux";
-import store from "../store";
+import { store, persistor } from "../store";
 import { SessionProvider } from "next-auth/react";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
-
-let persistor = persistStore(store);
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   return (
@@ -21,9 +20,11 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
       </Head>
       <SessionProvider session={session}>
         <Provider store={store}>
-          {/* <PersistGate persistor={persistor}> */}
-          <Component {...pageProps} />
-          {/* </PersistGate> */}
+          <PersistGate loading={null} persistor={persistor}>
+            <PayPalScriptProvider deferLoading={true}>
+              <Component {...pageProps} />
+            </PayPalScriptProvider>
+          </PersistGate>
         </Provider>
       </SessionProvider>
     </>
