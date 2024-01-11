@@ -272,23 +272,23 @@ export default function signin({ providers, callbackUrl, csrfToken }) {
 export async function getServerSideProps(context) {
   const { req, query } = context;
 
-  // const session = await getSession({ req });
-  // const { callbackUrl } = query;
+  const session = await getSession({ req });
+  const { callbackUrl } = query;
 
-  // if (session) {
-  //   return {
-  //     redirect: {
-  //       destination: callbackUrl,
-  //     },
-  //   };
-  // }
+  if (session) {
+    return {
+      redirect: {
+        destination: callbackUrl,
+      },
+    };
+  }
   const csrfToken = await getCsrfToken(context);
   const providers = Object.values(await getProviders());
   return {
     props: {
       providers,
       csrfToken,
-      // callbackUrl,
+      callbackUrl,
     },
   };
 }
