@@ -11,7 +11,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   return (
     <>
       <Head>
-        <title>Bazar</title>
+        <title>Bazar!</title>
         <meta
           name="description"
           content="Online shopping service for all your needs"

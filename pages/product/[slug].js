@@ -14,7 +14,7 @@ import Infos from "../../components/productPage/infos";
 import Reviews from "../../components/productPage/reviews";
 import ProductSwiper from "../../components/productSwiper";
 
-export default function product({ product, related }) {
+export default function Product({ product, related }) {
   const [activeImg, setActiveImg] = useState("");
   console.log(product.reviews, "reviews");
   const country = {
@@ -33,7 +33,7 @@ export default function product({ product, related }) {
           <div className={styles.path}>
             Home / {product.category.name}
             {product.subCategories.map((sub) => (
-              <span>/{sub.name}</span>
+              <span key={sub.name}>/{sub.name}</span>
             ))}
           </div>
           <div className={styles.product__main}>

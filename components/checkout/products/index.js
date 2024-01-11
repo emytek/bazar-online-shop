@@ -14,7 +14,7 @@ export default function Products({ cart }) {
       </div>
       <div className={styles.products__wrap}>
         {cart.products.map((product) => (
-          <div className={styles.product}>
+          <div key={product.id} className={styles.product}>
             <div className={styles.product__img}>
               <img src={product.image} alt="" />
               <div className={styles.product__infos}>

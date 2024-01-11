@@ -15,7 +15,7 @@ import { saveCart } from "../requests/user";
 import { updateCart, emptyCart } from "../store/cartSlice";
 import axios from "axios";
 
-export default function cart() {
+export default function Cart() {
   const Router = useRouter();
   const { data: session } = useSession();
   const [selected, setSelected] = useState([]);
