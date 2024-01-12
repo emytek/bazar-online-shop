@@ -14,7 +14,7 @@ import Infos from "../../components/productPage/infos";
 import Reviews from "../../components/productPage/reviews";
 import ProductSwiper from "../../components/productSwiper";
 
-export default function Product({ product, related }) {
+export default function ProductPage({ product, related }) {
   const [activeImg, setActiveImg] = useState("");
   console.log(product.reviews, "reviews");
   const country = {

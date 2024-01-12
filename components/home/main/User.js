@@ -6,12 +6,10 @@ import { HiOutlineClipboardList } from "react-icons/hi";
 import { BsHeart } from "react-icons/bs";
 import { AiOutlineMessage } from "react-icons/ai";
 import React, { useRef, useState } from "react";
-// Import Swiper React components
 import { Pagination, Navigation, EffectCards } from "swiper/modules";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 
-// Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -83,8 +81,8 @@ export default function User() {
               marginTop: "1rem",
             }}
           >
-            {userSwiperArray.map((item) => (
-              <SwiperSlide>
+            {userSwiperArray.map((item, i) => (
+              <SwiperSlide key={i}>
                 <Link href="">
                   <img src={item.image} alt="" />
                 </Link>
