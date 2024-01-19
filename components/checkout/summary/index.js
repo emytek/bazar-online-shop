@@ -40,8 +40,9 @@ export default function Summary({
         setOrder_Error("Please choose a shipping address.");
         return;
       }
+      console.log(user);
       const { data } = await axios.post("/api/order/create", {
-        user: user_id,
+        user,
         products: cart.products,
         shippingAddress: selectedAddress,
         paymentMethod,

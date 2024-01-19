@@ -51,7 +51,7 @@ export default function OrderPage({
         value: "pending",
       });
     }
-  }, [order]);
+  }, [orderData]);
   function createOrderHanlder(data, actions) {
     return actions.order
       .create({
