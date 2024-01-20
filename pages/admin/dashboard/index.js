@@ -95,7 +95,7 @@ export default function dashboard({ users, orders, products }) {
               <tbody>
                 {orders.map((order) => (
                   <tr>
-                    <td>{order.user.name}</td>
+                    <td>{order?.user?.name}</td>
                     <td>{order.total} $</td>
                     <td>
                       {order.isPaid ? (
@@ -139,7 +139,7 @@ export default function dashboard({ users, orders, products }) {
               <Link href="/admin/dashboard/users">View All</Link>
             </div>
             <table>
-              <tbody>
+              {/* <tbody>
                 {users.map((user) => (
                   <tr>
                     <td className={styles.user}>
@@ -153,7 +153,7 @@ export default function dashboard({ users, orders, products }) {
                     </td>
                   </tr>
                 ))}
-              </tbody>
+              </tbody> */}
             </table>
           </div>
         </div>
