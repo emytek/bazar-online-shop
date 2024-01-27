@@ -1,5 +1,5 @@
 import { sidebarData } from "../../../data/profile";
-import Item from "./Item";
+import Item from "./item";
 import styles from "./styles.module.scss";
 
 export default function Sidebar({ data }) {
