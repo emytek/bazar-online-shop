@@ -12,7 +12,7 @@ import { SlHandbag, SlEye } from "react-icons/sl";
 import { SiProducthunt } from "react-icons/si";
 import { GiTakeMyMoney } from "react-icons/gi";
 import Link from "next/link";
-export default function dashboard({ users, orders, products }) {
+export default function Dashboard({ users, orders, products }) {
   const { data: session } = useSession();
   return (
     <div>
@@ -94,7 +94,7 @@ export default function dashboard({ users, orders, products }) {
               </thead>
               <tbody>
                 {orders.map((order) => (
-                  <tr>
+                  <tr key={order._id}>
                     <td>{order?.user?.name}</td>
                     <td>{order.total} $</td>
                     <td>
