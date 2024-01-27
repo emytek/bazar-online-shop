@@ -51,14 +51,14 @@ export default function Colors({
           )}
         </span>
       </div>
-      <input
+      {/* <input
         type="text"
         value={product.color.color}
         name={name}
         hidden
         {...field}
         {...props}
-      />
+      /> */}
       <div className={styles.colors__infos}></div>
       <div className={toggle ? styles.toggle : ""}>
         <ColorExtractor getColors={(colors) => setColors(colors)}>

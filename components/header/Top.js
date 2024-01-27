@@ -19,16 +19,17 @@ export default function Top({ country }) {
         <ul className={styles.top__list}>
           <li className={styles.li}>
             <img
-              // src="https://cdn.britannica.com/68/5068-004-72A3F250/Flag-Nigeria.jpg"
-              src={country.flag}
+              src="https://cdn.britannica.com/68/5068-004-72A3F250/Flag-Nigeria.jpg"
+              // src={country.flag}
               alt=""
             />
-            <span>{country.name}</span>
+            {/* <span>{country.name}</span> */}
+            <span>Nigeria</span>
           </li>
 
           <li className={styles.li}>
             <MdSecurity />
-            <span>Buyer Protection..</span>
+            <span>Buyer Protection</span>
           </li>
 
           <li className={styles.li}>

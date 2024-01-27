@@ -26,9 +26,9 @@ export default function Infos({ product, setActiveImg }) {
   const { cart } = useSelector((state) => ({ ...state }));
   console.log(cart.cartItems, "CartItem check data");
 
-  //   useEffect(() => {
-  //     dispatch(hideDialog());
-  //   }, []);
+  useEffect(() => {
+    dispatch(hideDialog());
+  }, []);
   useEffect(() => {
     setSize("");
     setQty(1);
@@ -79,40 +79,42 @@ export default function Infos({ product, setActiveImg }) {
     }
   };
   //   ///---------------------------------
-  //   const handleWishlist = async () => {
-  //     try {
-  //       if (!session) {
-  //         return signIn();
-  //       }
-  //       const { data } = await axios.put("/api/user/wishlist", {
-  //         product_id: product._id,
-  //         style: product.style,
-  //       });
-  //       dispatch(
-  //         showDialog({
-  //           header: "Product Added to Whishlist Successfully",
-  //           msgs: [
-  //             {
-  //               msg: data.message,
-  //               type: "success",
-  //             },
-  //           ],
-  //         })
-  //       );
-  //     } catch (error) {
-  //       dispatch(
-  //         showDialog({
-  //           header: "Whishlist Error",
-  //           msgs: [
-  //             {
-  //               msg: error.response.data.message,
-  //               type: "error",
-  //             },
-  //           ],
-  //         })
-  //       );
-  //     }
-  //   };
+  const handleWishlist = async () => {
+    try {
+      if (!session) {
+        return signIn();
+      }
+      const { data } = await axios.put("/api/user/wishlist", {
+        product_id: product._id,
+        style: product.style,
+      });
+      console.log(product._id, "PRODUCT ID HERE");
+      console.log(product.style, "PRODUCT STYLE");
+      dispatch(
+        showDialog({
+          header: "Product Added to Wishlist Successfully",
+          msgs: [
+            {
+              msg: data.message,
+              type: "success",
+            },
+          ],
+        })
+      );
+    } catch (error) {
+      dispatch(
+        showDialog({
+          header: "Whishlist Error",
+          msgs: [
+            {
+              msg: error.response.data.message,
+              type: "error",
+            },
+          ],
+        })
+      );
+    }
+  };
   return (
     <div className={styles.infos}>
       {/* <DialogModal /> */}
