@@ -18,6 +18,7 @@ export default function StyleFilter({ data, styleHandler, replaceQuery }) {
             const check = replaceQuery("style", style);
             return (
               <div
+                key={i}
                 className={styles.filter__sizes_size}
                 onClick={() => styleHandler(check.result)}
               >

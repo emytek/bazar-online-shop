@@ -23,6 +23,7 @@ export default function PatternsFilter({
             const check = replaceQuery("pattern", pattern);
             return (
               <label
+                key={i}
                 htmlFor={pattern}
                 className={styles.filter__sizes_size}
                 onClick={() => patternHandler(check.result)}

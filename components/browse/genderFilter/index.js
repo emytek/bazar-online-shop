@@ -17,6 +17,7 @@ export default function GenderFilter({ genderHandler, replaceQuery }) {
             const check = replaceQuery("gender", gender);
             return (
               <label
+                key={i}
                 htmlFor={gender}
                 className={styles.filter__sizes_size}
                 onClick={() => genderHandler(check.result)}
